@@ -1,0 +1,162 @@
+/* Light Mode Styles */
+:root {
+  --primary-color: #1A73E8;
+  --primary-hover-color: #1b66c9;
+  --secondary-color: #dddddd;
+  --text-color: #676767;
+}
+
+body {
+  min-width: 570px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+#message {
+  font-size: 16px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-decoration: none;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.button:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.input {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: var(--secondary-color);
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 24px;
+  margin: 0;
+}
+
+h4 {
+  margin: 0;
+  padding-top: 10px;
+}
+
+h4 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+h4 a:hover {
+  color: var(--primary-hover-color);
+  text-decoration: none;
+}
+
+
+/* Dark Mode Styles */
+.dark-mode {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark-mode #message {
+  color: #ccc;
+}
+
+/* Targeting the button by ID */
+#darkModeToggle {
+  background-color: #555;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Styling the button on hover */
+#darkModeToggle:hover {
+  background-color: #333;
+}
+
+.dark-mode .input {
+  border-color: #777;
+}
+
+.dark-mode th {
+  background-color: #444;
+}
+
+.dark-mode h4 a {
+  color: #aaa;
+}
+
+.dark-mode h4 a:hover {
+  color: #007BFF;
+}
+
+
+/* Style for the language dropdown */
+.langdropdown {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.langdropdown:hover {
+  border-color: #007bff;
+}
+
+/* Style for the dropdown arrow */
+.langdropdown::after {
+  content: '\25BE'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* Style for dropdown options */
+.langdropdown option {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Hover effect for dropdown options */
+.langdropdown option:hover {
+  background-color: #007bff;
+  color: #fff;
+}
