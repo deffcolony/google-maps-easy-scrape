@@ -1,13 +1,10 @@
-/* import: https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap */
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
 body[theme='dark'] {
     --primary-color: #007BFF;
     --primary-hover-color: #0056b3;
     --secondary-color: #333;
     --bkg-color-1: #222;
     --text-color: #ccc;
+    --button-group-text-color: #fff;
   
     --dropdown-bg-color: #333;
     --dropdown-text-color: #ccc;
@@ -29,6 +26,7 @@ body[theme='light'] {
     --secondary-color: #dddddd;
     --bkg-color-1: #f5f5f5;
     --text-color: #676767;
+    --button-group-text-color: #333;
   
     --dropdown-bg-color: #fff;
     --dropdown-text-color: #333;
@@ -48,17 +46,17 @@ body[theme='light'] {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: var(--text-color);
 }
 
 h1 {
-    font-weight: bold;
+    font-weight: 600;
 }
 
-p, h1, h2, h3, h4, h5, h6, a, span, label, input, select, button, th, td {
+/* p, h1, h2, h3, h4, h5, h6, a, span, label, input, select, button, th, td {
     color: var(--text-color);
-}
+} */
 
 p.description {
     margin-top: 10px;
@@ -142,7 +140,9 @@ select {
     color: var(--dropdown-text-color);
 }
 
-
+.fullwidth {
+    width: 100%;
+}
 
 #button-actions {
     display: flex;
@@ -150,20 +150,38 @@ select {
     align-items: center;
     margin-top: 20px;
 }
+/* <div class="card"> */
   
-.about-outter {
+.page-section {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 24px;
+    overflow: auto;
+}
+.page-section.style {
     border: 1px solid var(--table-border-color);
     background-color: var(--bkg-color-1);
-    padding: 40px 40px;
+    padding: 40px;
     margin: 20px;
 }
-.about-outter #about {
+.page-section.style-header {
+    padding: 40px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--table-border-color);
+    background-color: var(--bkg-color-1);
+}
+
+.page-section>#inner {
     max-width: 600px;
     width: 100%;
+}
+.page-section>#inner>.header .icon {
+    transition: filter 0.3s;
+}
+
+.page-section:hover>#inner>.header .icon {
+    filter: drop-shadow(0 0 4px var(--primary-color));
 }
 
 body[theme='light'] #about .about-footer {
@@ -179,14 +197,30 @@ body[theme='dark'] #about .about-footer {
     justify-content: space-between;
     border-radius: 64px;
     border: 1px solid var(--table-border-color);
-    overflow: hidden;
+    overflow: auto;
+}
+.button-group::-webkit-scrollbar {
+    display: none;
 }
 .button-group .item {
     width: 100%;
     border: none;
-    color: var(--primary-color);
     cursor: pointer;
     display: flex;
+    transition: background-color 0.1s;
+}
+.button-group .item p {
+    color: var(--button-group-text-color);
+    transition: color 0.1s;
+}
+.button-group .item:hover {
+    background-color: var(--primary-color);
+}
+.button-group .item:hover p {
+    color: #fff;
+}
+.button-group .item:hover div.icon svg {
+    fill: #fff;
 }
 .button-group .item .text {
     padding: 12px;
@@ -217,3 +251,58 @@ body[theme='dark'] #about .about-footer {
     fill: #fff;
 }
 
+/* cards */
+
+.card {
+    border-radius: 24px;
+    border: 1px solid var(--table-border-color);
+    background-color: var(--bkg-color-1);
+    padding: 40px 40px;
+    overflow: auto;
+}
+.card>.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.setting-card {
+    border-radius: 64px;
+    overflow: auto;
+    display: flex;
+    /* align-items: center; */
+    min-height: 64px;
+    padding: 0 12px;
+    border: 1px solid var(--table-border-color);
+    margin-bottom: 8px;
+}
+.setting-card .title {
+    width: 250px;
+    display: flex;
+    align-items: center;
+}
+.setting-card .content {
+    width: 100%;
+    padding-left: 20px;
+    border-left: 1px solid var(--table-border-color);
+    display: flex;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    .setting-card {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 12px;
+        padding: 12px;
+    }
+    .setting-card .title {
+        width: 100%;
+    }
+    .setting-card .content {
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid var(--table-border-color);
+        padding-top: 12px;
+    }
+}
