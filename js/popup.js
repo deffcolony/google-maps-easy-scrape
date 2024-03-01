@@ -1,13 +1,22 @@
+function getBrowserTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // add dark theme attr to the body
+    document.body.setAttribute('theme', getBrowserTheme());
+
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var currentTab = tabs[0];
         var actionButton = document.getElementById('actionButton');
         var downloadCsvButton = document.getElementById('downloadCsvButton');
         var resultsTable = document.getElementById('resultsTable');
         var filenameInput = document.getElementById('filenameInput');
+        const scrapeResults = document.getElementById('scrapeResults');
+        const infobutton = document.getElementById('about-ext');
 
         if (currentTab && currentTab.url.includes("://www.google.com/maps/search")) {
-            document.getElementById('message').textContent = "Let's scrape Google Maps!";
+            document.getElementById('message').textContent = "Click the shovel below to scrape the data from the current Google Maps search results.";
             actionButton.disabled = false;
             actionButton.classList.add('enabled');
         } else {
@@ -29,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 target: {tabId: currentTab.id},
                 function: scrapeData
             }, function(results) {
+                scrapeResults.classList.add('visible');
                 while (resultsTable.firstChild) {
                     resultsTable.removeChild(resultsTable.firstChild);
                 }
@@ -77,6 +87,10 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadCsv(csv, filename); 
         });
 
+        infobutton.addEventListener('click', function() {
+            // load a new tab with the about page
+            chrome.tabs.create({ url: '../pages/about.html' }); 
+        });
     });
 });
 
