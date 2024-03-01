@@ -54,6 +54,14 @@ h1 {
     font-weight: 600;
 }
 
+body[theme='dark'] .ext-icon {
+    filter: drop-shadow(0 0 4px #bdccdb);
+}
+
+body[theme='light'] .ext-icon {
+    filter: drop-shadow(0 0 4px #1A73E8);
+}
+
 /* p, h1, h2, h3, h4, h5, h6, a, span, label, input, select, button, th, td {
     color: var(--text-color);
 } */
@@ -91,6 +99,11 @@ button.btn.btn-primary {
 }
 button.btn.btn-primary:hover {
     background-color: var(--primary-hover-color);
+}
+button.btn.btn-primary:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: not-allowed;
 }
 
 button.icon {
@@ -165,11 +178,19 @@ select {
     padding: 40px;
     margin: 20px;
 }
+
 .page-section.style-header {
     padding: 40px;
     border-radius: 0;
     border-bottom: 1px solid var(--table-border-color);
     background-color: var(--bkg-color-1);
+}
+
+body[theme='light'] .page-section.style-header {
+    background: linear-gradient(180deg, #f5f5f5, #ddd);
+}
+body[theme='dark'] .page-section.style-header {
+    background: linear-gradient(180deg, #333, #222);
 }
 
 .page-section>#inner {
