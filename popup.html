@@ -4,51 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="popup"></title>
-  <select id="languageSelect" class="langdropdown">
-    <option value="en">English</option>
-    <option value="nl">Dutch</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="es">Spanish</option>
-    <option value="it">Italian</option>
-    <option value="pt">Portuguese</option>
-    <option value="ru">Russian</option>
-    <option value="zh">Chinese</option>
-    <option value="jp">Japanese</option>
-    <!-- Add more language options as needed -->
-  </select>
   <title>Google Maps Easy Scrape</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="js/i18n.js"></script>
 </head>
 <body>
-  <h1>&#x1F5FA;&#xFE0F; Google Maps Easy Scrape</h1>
-  <h4>
-    <a href="https://www.youtube.com/@itsmikepowers" target="_blank">By Mike</a> 
-    <a href="https://www.buymeacoffee.com/itsmikepowers" target="_blank">Buy Me A Coffee :)</a>
-  </h4>
+  <div class="popup-header">
+    <!--<div class="left" style="display: flex;">
+      <div class="langselect">
+        <select id="languageSelect" class="langdropdown">
+          <option value="en">English</option>
+          <option value="nl">Dutch</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <option value="es">Spanish</option>
+          <option value="it">Italian</option>
+          <option value="pt">Portuguese</option>
+          <option value="ru">Russian</option>
+          <option value="zh">Chinese</option>
+          <option value="jp">Japanese</option>
+          <!-- Add more language options as needed --
+        </select>
+      </div>
+    </div>-->
+    <div class="left" style="display: flex; gap: 8px; align-items: center; justify-content: center;">
+      <div style="display: flex; gap: 8px;">
+        <button class="icon" id="darkModeToggle" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9,10L6,5H18L15,10H9M18,4H6V2H18V4M9,22V11H15V22H9M12,13A1,1 0 0,0 11,14A1,1 0 0,0 12,15A1,1 0 0,0 13,14A1,1 0 0,0 12,13Z" /></svg>
+        </button>
+      </div>
+      <h1>Google Maps Easy Scrape</h1>
+    </div>
+    <div class="right" style="display: flex; gap: 8px;">
+      <button class="icon" id="about-ext">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
+      </button>
+    </div>
+  </div>
 
   <div id="message">Checking URL...</div>
   
   <!-- Action Buttons -->
 
-  <button id="actionButton" class="button" disabled>Scrape Google Maps</button>
-  <button id="downloadCsvButton" class="button" disabled>Download as CSV</button>
-  <button id="darkModeToggle" class="button">Dark Mode</button>
-
+  <!-- <button id="actionButton" class="button" disabled>Scrape Google Maps</button>
+  <button id="downloadCsvButton" class="button" disabled>Download as CSV</button> -->
   <!-- Filename Input -->
-  <input type="text" id="filenameInput" class="input" placeholder="Enter file name" />
-  <table id="resultsTable">
-    <thead>
-      <tr>
-        <!-- Table Header -->
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Table Body -->
-    </tbody>
-  </table>
+  <input type="text" id="filenameInput" class="input" placeholder="Custom Filename" disabled>
+  <div id="scrapeResults">
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <!-- Table Header -->
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Table Body -->
+        <div id="table-actions">
+          <button id="actionButton" class="icon" title="Scrape">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.1,1.81L12.27,4.64C11.5,5.42 11.5,6.69 12.27,7.47L13.68,8.88L9.13,13.43L6.31,10.6L4.89,12C-0.06,17 3.5,20.5 3.5,20.5C3.5,20.5 7,24 12,19.09L13.41,17.68L10.61,14.88L15.15,10.34L16.54,11.73C17.32,12.5 18.59,12.5 19.37,11.73L22.2,8.9L15.1,1.81M17.93,10.28L16.55,8.9L15.11,7.46L13.71,6.06L15.12,4.65L19.35,8.88L17.93,10.28Z" /></svg>
+          </button>
+          <button id="downloadCsvButton" class="icon" disabled title="Download as CSV">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A7 7 0 0 0 5 9C5 14.25 12 22 12 22S19 14.25 19 9A7 7 0 0 0 12 2M7.5 10H10V5H14V10H16.5L12 14.5Z" /></svg>
+          </button> 
+        </div>
+      </tbody>
+    </table>
+  </div>
 
   <script src="js/popup.js" defer></script>
   <script src="js/darkmode.js" defer></script>
