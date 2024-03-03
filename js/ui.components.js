@@ -131,7 +131,7 @@ class dropdown extends EventTarget {
                 c.dialog.css({
                     top:  $(c.dropdown).offset().top + $(c.dropdown).height() + topbottom_padding + 1,
                     left: $(c.dropdown).offset().left,
-                    width: $(c.dropdown).width() + leftright_padding + 1,
+                    width: $(c.dropdown).width() + leftright_padding + 2,
                 });
         
             }

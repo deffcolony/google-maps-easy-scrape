@@ -57,23 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 openUrl(url, true);
             }
         });
-
-        getButtonGroup('themeSelect').forEach(function(button) {
-            button.addEventListener('click', function() {
-                // remove active class from all buttons
-                getButtonGroup('themeSelect').forEach(function(button) {
-                    button.classList.remove('active');
-                });
-
-                const theme = button.getAttribute('data-theme');
-                document.body.setAttribute('theme', theme);
-                button.classList.add('active');
-
-                if (theme == "system") {
-                    document.body.setAttribute('theme', getBrowserTheme());
-                }
-            });
-        });
     });
 
     saveSettingsButton.addEventListener('click', function() {
