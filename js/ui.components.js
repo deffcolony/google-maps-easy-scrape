@@ -77,7 +77,7 @@ class dropdown extends EventTarget {
         return base;
     }
 
-    openDropdown(c) {
+    openDropdown(c, dispatch) {
         const dialog = $("<div class='dropdown-dialog'></div>");
         c.dialog = dialog;
         $('body').append(c.dialog);
@@ -85,7 +85,10 @@ class dropdown extends EventTarget {
         c.items.forEach((item) => {
             const el = $("<div class='item' data-value='"+item.value+"'>"+item.text+"</div>");
             el.on('click', () => {
-                this.setValue(item.value);
+                console.log('clicked', item.value);
+                c.setValue(item.value);
+                $(c.dropdown).removeClass('open');
+                dispatch(c.id, item.value);
                 dialog.remove();
             });
             dialog.append(el);
@@ -115,6 +118,14 @@ class dropdown extends EventTarget {
     init() {
         const dropdown = $(this.dropdown);
         const openDropdown = this.openDropdown;
+        const dispatch = (id, value) => {
+            const event = new Event('change', {});
+            event.detail = {
+                id: id,
+                value: value
+            };
+            this.dispatchEvent(event);
+        }
         const c = this;
 
         // watch for window resize
@@ -143,7 +154,7 @@ class dropdown extends EventTarget {
                 c.dialog.remove();
             } else {
                 dropdown.addClass('open');
-                openDropdown(c);
+                openDropdown(c, dispatch);
             }
         });
     }
@@ -156,6 +167,10 @@ class dropdown extends EventTarget {
 
     setValue(value) {
         this.value = value;
-        $(`${this.dropdown} .selected`).text(this.items.filter((item) => item.value === value)[0].text);
+        try {
+            $(`${this.dropdown} .selected`).text(this.items.filter((item) => item.value === value)[0].text);
+        } catch (e) {
+            console.error('Error setting value', e);
+        }
     }
 }
