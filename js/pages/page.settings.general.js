@@ -6,25 +6,6 @@ const sendMessage = (message) => {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    // const openFailedSave = (stack) => {
-    //     const m_body = `
-    //         <p>Failed to save settings</p><br>
-    //         <pre>${stack}</pre>
-    //     `;
-    //     const m_footer = `<button class="btn btn-primary btn-modal" id="closeWarningModal" data-dismiss="modal">Close</button>`;
-    //     const modal = new modalCreator(
-    //         "savefailed",
-    //         "Error saving settings",
-    //         m_body,
-    //         m_footer,
-    //         {}
-    //     )
-    //     const m = modal.create();
-    //     modal.show();
-    //     $(`#${m.id} #closeWarningModal`).click(function() {
-    //         modalAPI.removeModal(m.id);
-    //     });
-    // }
 
     const lang = new dropdown("languageSelect");
     lang.addItems([
