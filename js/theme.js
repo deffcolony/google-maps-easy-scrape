@@ -1,6 +1,11 @@
 const getSavedTheme = async () => {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(['theme'], (result) => {
+            console.log('result', result);
+            if (!result.theme) {
+                resolve('system');
+                return;
+            }
             resolve(result.theme);
         });
     });
