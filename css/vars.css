@@ -1,3 +1,5 @@
+@import url(./modal.css);
+
 body[theme='dark'] {
     --primary-color: #007BFF;
     --primary-hover-color: #0056b3;
@@ -232,7 +234,8 @@ select {
     padding: 12px 24px;
     cursor: pointer;
 }
-.dropdown p {
+.dropdown p,
+.dropdown-dialog * {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -245,6 +248,7 @@ select {
 }
 
 .dropdown-dialog {
+    top: 0px;
     position: absolute;
     background-color: var(--dropdown-bg-color);
     min-width: 160px;
@@ -253,6 +257,14 @@ select {
     border-radius: 0 0 8px 8px;
     border: 1px solid var(--table-border-color);
     overflow: auto;
+    max-height: 500px;
+}
+.dropdown-dialog::-webkit-scrollbar {
+    width: 8px;
+}
+.dropdown-dialog::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 8px;
 }
 .dropdown-dialog .item {
     color: var(--dropdown-text-color);
