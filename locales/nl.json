@@ -4,6 +4,10 @@
     "buttonScrape": "Google Maps Scrapen",
     "buttonDownloadCsv": "Downloaden als CSV",
     "placeholderFileName": "Voer bestandsnaam in",
-    "messageCheckingUrl": "URL Controleren..."
+    "messageCheckingUrl": "URL Controleren...",
+    "text.settings": "Instellingen",
+    "text.settings.general": "Algemeen",
+    "text.settings.language": "Taal",
+    "text.settings.save": "Opslaan"
   }
 }
