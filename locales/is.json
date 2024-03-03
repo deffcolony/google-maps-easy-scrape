@@ -1,10 +1,11 @@
 {
-    "translations": {
-        "text.general": "Alment",
-        "text.appearance": "Útlit",
-        "text.settings": "Stillingar",
-        "text.settings.theme": "Theme",
-        "text.settings.language": "Tungumál",
-        "text.settings.save": "Vista"
-    }
+  "translations": {
+    "text.general": "Alment",
+    "text.appearance": "Útlit",
+    "text.about": "Um",
+    "text.settings": "Stillingar",
+    "text.settings.theme": "Theme",
+    "text.settings.language": "Tungumál",
+    "text.settings.save": "Vista"
+  }
 }
