@@ -23,11 +23,14 @@ const logColors = {
   }
   
   log('i18n script loaded', 'INFO');
+
 // Function to load translation messages for a specific language
 function loadMessages(language) {
+  log(`Loading translation messages for language: ${language}`);
     return new Promise((resolve, reject) => {
       chrome.runtime.getPackageDirectoryEntry((root) => {
-        root.getFile(`_locales/${language}/messages.json`, {}, (fileEntry) => {
+        console.log('root', root)
+        root.getFile(`./locales/${language}.json`, {}, (fileEntry) => {
           fileEntry.file((file) => {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -58,6 +61,7 @@ function loadMessages(language) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       log(`Failed to load translation messages for language: ${language}. Error: ${errorMessage}`, 'ERROR');
+      console.error(error);
     }
   }
   
