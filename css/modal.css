@@ -22,6 +22,10 @@
     left: 0;
 }
 
+#modal-container * {
+    color: white;
+}
+
 #modal-container.hide {
     pointer-events: none;
     opacity: 0;
