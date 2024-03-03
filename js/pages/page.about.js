@@ -1,47 +1,7 @@
-function getBrowserTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-var options = {
-    theme: getBrowserTheme(),
-    language: 'en'
-};
-
-function setTheme(theme) {
-    document.body.setAttribute('theme', theme);
-}
-
-function saveOptions(opts) {
-    chrome.storage.local.set({ data: opts }).then(function() {
-        console.log('Options saved', opts);
-    });
-}
-
-function getOptions() {
-    try {
-        chrome.storage.local.get("data", function
-        (items) {
-            console.log('Options retrieved', items);
-            options = items;
-        });
-        // apply
-        setTheme(options.theme);
-    } catch (e) {
-        console.error(e);
-    }
-    return options;
-}
-
 // dom loaded
 document.addEventListener('DOMContentLoaded', function() {
-    document.body.setAttribute('theme', getBrowserTheme());
-
-    // get options
-    getOptions();
-
     // get buttons with class "url-button"
     const urlButtons = document.querySelectorAll('.url-button');
-    const saveSettingsButton = document.getElementById('saveSettingsButton');
     // loop through buttons
     urlButtons.forEach(function(button) {
         // get the url from the button's data-url attribute
@@ -57,11 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 openUrl(url, true);
             }
         });
-    });
-
-    saveSettingsButton.addEventListener('click', function() {
-        const theme = document.body.getAttribute('theme');
-        saveOptions({theme: theme});
     });
 });
 

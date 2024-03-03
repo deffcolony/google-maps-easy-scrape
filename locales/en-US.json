@@ -1,10 +1,10 @@
 {
-    "translations": {
-      "headers": "Title,Rating,Reviews,Phone,Industry,Address,Website,Google Maps Link",
-      "buttonScrape": "Scrape Google Maps",
-      "buttonDownloadCsv": "Download as CSV",
-      "placeholderFileName": "Enter file name",
-      "messageCheckingUrl": "Checking URL..."
-      
-    }
+  "translations": {
+    "text.general": "General",
+    "text.appearance": "Appearance",
+    "text.settings": "Settings",
+    "text.settings.theme": "Theme",
+    "text.settings.language": "Language",
+    "text.settings.save": "Save"
   }
+}

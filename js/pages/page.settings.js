@@ -3,17 +3,23 @@ console.log('nav', nav);
 const iframe = $('#settings-iframe');
 const ext_ver = $('#ext-ver');
 
-function getBrowserTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+async function getBrowserTheme() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get(['theme'], (result) => {
+            resolve(result.theme);
+        });
+    });
+
+    // return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 function setTheme(theme) {
     $('body').attr('theme', theme);
 }
 
+
 // dom loaded
-document.addEventListener('DOMContentLoaded', function() {
-    $('body').attr('theme', getBrowserTheme());
+document.addEventListener('DOMContentLoaded', async function() {
     // get extension version
     ext_ver.text(`Version: ${chrome.runtime.getManifest().version}`);
 
@@ -32,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // get the url from the button's data-url attribute
         // add event listener to each button
         button.addEventListener('click', function() {
-            console.log('Clicked', page);
             loadSettingsPage(page);
         });
 
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loadSettingsPage(page);
         }
     });
+    watchEventsFromIframe();
 });
 
 const loadSettingsPage = (page) => {
@@ -52,14 +58,28 @@ const loadSettingsPage = (page) => {
     iframe.attr('src', `/pages/settings/${page}.html`);
     // set param to url
     window.history.pushState({}, '', `?page=${page}`);
-    watchEventsFromIframe();
 }
 
 const watchEventsFromIframe = () => {
     window.addEventListener('message', function(event) {
-        console.log('received', event);
-        if (event.data.type === 'setTheme') {
-            setTheme(event.data.theme);
+        switch (event.data.type) {
+            case 'setTheme':
+                setTheme(event.data.theme);
+                chrome.storage.sync.set({ theme: event.data.theme }, () => {
+                    console.log('Theme saved', event.data.theme);
+                });
+    	        break;
+
+            case 'setPage':
+                loadSettingsPage(event.data.page);
+                break;
+
+            case 'language':
+                setLanguage(event.data.language, {
+                    dontsend: true
+                });
+                break;
+
         }
     });
 }
