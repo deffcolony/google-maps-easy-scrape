@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="/js/libs/jquery.js"></script>
+    <script src="/js/libs/modal.js" async></script>
     <script src="/js/theme.js"></script>
+    <script src="/js/i18n.js" async></script>
     <script src="/js/ui.components.js" async></script>
     <script src="/js/pages/page.settings.appearance.js" async></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/page.settings.page.css">
 </head>
 <body>
+    <div id="modal-container" class="modal-container"></div>
     <div attr-page="home" id="page-home" class="setting-page page-home">
         <div class="page-section style" >
             <div id="inner">
@@ -19,12 +22,12 @@
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18,4V3A1,1 0 0,0 17,2H5A1,1 0 0,0 4,3V7A1,1 0 0,0 5,8H17A1,1 0 0,0 18,7V6H19V10H9V21A1,1 0 0,0 10,22H12A1,1 0 0,0 13,21V12H21V4H18Z" /></svg>
                     </div>
-                    <h1>Appearance</h1>
+                    <h1 data-i18n="text.appearance"></h1>
                 </div>
                 <div class="content">
                     <div class="setting-theme" style="display: flex; gap: 8px;">
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <h2>Theme</h2>
+                            <h2 data-i18n="text.settings.theme">Theme</h2>
                         </div>
                         <div class="button-group fullwidth" id="themeSelect">
                             <div class="item item-dark" data-value="dark">
