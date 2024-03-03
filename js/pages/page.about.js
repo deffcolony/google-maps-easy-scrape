@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // get buttons with class "url-button"
     const urlButtons = document.querySelectorAll('.url-button');
-    const saveSettingsButton = document.getElementById('saveSettingsButton');
     // loop through buttons
     urlButtons.forEach(function(button) {
         // get the url from the button's data-url attribute

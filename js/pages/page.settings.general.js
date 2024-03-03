@@ -1,5 +1,10 @@
 /// <reference path="../ui.components.js" />
 
+const sendMessage = (message) => {
+    window.parent.postMessage(message, '*');
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const openFailedSave = (stack) => {
         const m_body = `

@@ -6,7 +6,6 @@ const ext_ver = $('#ext-ver');
 async function getBrowserTheme() {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(['theme'], (result) => {
-            console.log('theme value currently is', result.theme);
             resolve(result.theme);
         });
     });
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         // get the url from the button's data-url attribute
         // add event listener to each button
         button.addEventListener('click', function() {
-            console.log('Clicked', page);
             loadSettingsPage(page);
         });
 
@@ -64,8 +62,6 @@ const loadSettingsPage = (page) => {
 
 const watchEventsFromIframe = () => {
     window.addEventListener('message', function(event) {
-        console.log('iframe event', event);
-
         switch (event.data.type) {
             case 'setTheme':
                 setTheme(event.data.theme);

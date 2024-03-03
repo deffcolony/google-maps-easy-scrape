@@ -15,7 +15,6 @@ class buttonGroup extends EventTarget {
         this.id = id;
         this.buttonGroup = `div.button-group${ id ? `#${id}` : '' }`;
         this.items = $(this.buttonGroup).find('.item');
-        console.log("construct: ",this.buttonGroup)
     }
 
     init() {
@@ -29,7 +28,6 @@ class buttonGroup extends EventTarget {
             this.dispatchEvent(event);
         }
         this.items.each(function(index, button) {
-            console.log('button', button);
             button.addEventListener('click', function() {
                 $(`${buttonGroup} .item`).removeClass('active');
                 $(button).addClass('active');
@@ -41,7 +39,6 @@ class buttonGroup extends EventTarget {
 
     on(event, callback) {
         this.addEventListener(event, (event) => {
-            console.log('event', event);
             callback(event);
         });
     }
@@ -73,7 +70,6 @@ class dropdown extends EventTarget {
         const base = $("<div class='dropdown' id='"+this.id+"'>"+
             "<p class='selected'>Select</p>"+
         "</div>");
-        console.log('base', base);
         return base;
     }
 
@@ -85,7 +81,6 @@ class dropdown extends EventTarget {
         c.items.forEach((item) => {
             const el = $("<div class='item' data-value='"+item.value+"'>"+item.text+"</div>");
             el.on('click', () => {
-                console.log('clicked', item.value);
                 c.setValue(item.value);
                 $(c.dropdown).removeClass('open');
                 dispatch(c.id, item.value);

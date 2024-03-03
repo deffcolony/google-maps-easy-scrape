@@ -24,8 +24,7 @@ function log(message, level = 'INFO') {
   console.log(`%c[${timestamp}][${level}]`, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, message);
 }
   
-log('i18n script loaded', 'INFO');
-
+// log('i18n script loaded', 'INFO');
 function setupTranslations( translations ) {
   if (!translations) {
     log('No translations available', 'WARNING');
@@ -38,6 +37,11 @@ function setupTranslations( translations ) {
   elements.forEach((element) => {
     // get the translation key from the element
     const key = element.getAttribute('data-i18n');
+    // does key exist in translations object?
+    if (!translations[key]) {
+      log(`Translation key not found: ${key}`, 'WARNING');
+      return;
+    }
     // get the translation message from the translations object
     const message = translations[key];
     // set the inner text of the element to the translation message
@@ -47,7 +51,7 @@ function setupTranslations( translations ) {
 
 // Function to load translation messages for a specific language
 function loadMessages(language) {
-  log(`Loading translation messages for language: ${language}`);
+  console.log("%cLoading translation messages for language: " + language, "background: #222; color: #bada55; padding: 0 4px; border-radius: 4px;");
     return new Promise((resolve, reject) => {
       chrome.runtime.getPackageDirectoryEntry((root) => {
         if (!root) {
@@ -79,7 +83,6 @@ function loadMessages(language) {
     const language = chrome.i18n.getUILanguage();
  
     chrome.storage.sync.get(['language'], async function(result) {
-      console.log('Value currently is ' + result.language);
       if (result.language) {
         const t = await loadMessages( result.language );
         setupTranslations( t["translations"] );
@@ -100,12 +103,6 @@ function loadMessages(language) {
     //   log(`Failed to load translation messages for language: ${language}. Error: ${errorMessage}`, 'ERROR');
     //   console.error(error);
     // }
-  }
-
-  // iframe event
-  const sendMessage = (message) => {
-    log(`Sending message to parent: ${JSON.stringify(message)}`, 'INFO');
-    window.parent.postMessage(message, '*');
   }
 
   async function setLanguage(lang, flags = {}) {

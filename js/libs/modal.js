@@ -44,7 +44,6 @@ class modalCreator {
         const modal = createModal(this.id, this.title, this.body, this.footer, this.settings);
         this.id = modal.id;
         modalAPI.addModal(this.id, modal.modal);
-        console.log('id', this.id);
         return modal}
     show() {modalAPI.showModal(this.id)}
     hide() {modalAPI.hideModal(this.id)}
@@ -72,7 +71,6 @@ const modalAPI = {
     },
     hideModal: function (id) {
         $("body").css("overflow", "auto");
-        console.log('removing modal', id);
         if (!modalmap.has(id)) {
             throw new Error('Modal does not exist')
         }
