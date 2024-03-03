@@ -1,12 +1,9 @@
 {
   "translations": {
-    "headers": "Titel,Beoordeling,Recensies,Telefoon,Branche,Adres,Website,Google Maps Link",
-    "buttonScrape": "Google Maps Scrapen",
-    "buttonDownloadCsv": "Downloaden als CSV",
-    "placeholderFileName": "Voer bestandsnaam in",
-    "messageCheckingUrl": "URL Controleren...",
+    "text.general": "Algemeen",
+    "text.appearance": "Uiterlijk",
     "text.settings": "Instellingen",
-    "text.settings.general": "Algemeen",
+    "text.settings.theme": "Theme",
     "text.settings.language": "Taal",
     "text.settings.save": "Opslaan"
   }
