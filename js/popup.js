@@ -1,10 +1,5 @@
-function getBrowserTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     // add dark theme attr to the body
-    document.body.setAttribute('theme', getBrowserTheme());
 
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var currentTab = tabs[0];
