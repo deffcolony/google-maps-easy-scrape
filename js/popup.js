@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         infobutton.addEventListener('click', function() {
             // load a new tab with the about page
-            chrome.tabs.create({ url: '../pages/about.html' }); 
+            chrome.tabs.create({ url: '../pages/settings.html?page=about' }); 
         });
     });
 });

@@ -2,6 +2,7 @@
   "translations": {
     "text.general": "General",
     "text.appearance": "Appearance",
+    "text.about": "About",
     "text.settings": "Settings",
     "text.settings.theme": "Theme",
     "text.settings.language": "Language",

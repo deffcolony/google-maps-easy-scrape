@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // add event listener to each button
         button.addEventListener('click', function() {
             // open the url in a new tab
-            openUrl(url);
+            u(url);
         });
         // middle click
         button.addEventListener('auxclick', function(event) {
             if (event.button === 1) {
-                openUrl(url, true);
+                u(url);
             }
         });
     });
@@ -27,18 +27,13 @@ function getButtonGroup(id) {
     return buttons;
 }
 
-function openUrl(url, newTab = false) {
+function u(url) {
     if (url == null) return;
+
+    const ops = {
+        action: 'openUrl',
+        url: url,
+    }
     // href
-    if (url.includes('http')) {
-        if (newTab) {
-            window.open(url, '_blank');
-        } else {
-            document.location.href = url;
-        }
-    }
-    // chrome
-    else {
-        chrome.tabs.create({url: url});
-    }
+    window.parent.postMessage(ops, '*');
 }
