@@ -59,11 +59,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 const loadSettingsPage = (page) => {
     console.log('Loading settings page', page);
     nav.find('.item[attr-page]').removeClass('active');
-    const i18n = nav.find('.item[attr-page="' + page + '"] p').attr('data-i18n');
-    const text = nav.find('.item[attr-page="' + page + '"] p').text();
-    $(".page-text #current-page").attr('data-i18n', i18n);
-    $(".page-text #current-page").html(text);
-    
 
     nav.find('.item[attr-page="' + page + '"]').addClass('active');
     iframe.attr('src', `/pages/settings/${page}.html`);
