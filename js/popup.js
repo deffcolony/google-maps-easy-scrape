@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var filenameInput = document.getElementById('filenameInput');
         const scrapeResults = document.getElementById('scrapeResults');
         const infobutton = document.getElementById('about-ext');
+        const settingsButton = document.getElementById('ext-settings');
 
         if (currentTab && currentTab.url.includes("://www.google.com/maps/search")) {
             document.getElementById('message').textContent = "Click the shovel below to scrape the data from the current Google Maps search results.";
@@ -83,8 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         infobutton.addEventListener('click', function() {
-            // load a new tab with the about page
             chrome.tabs.create({ url: '../pages/settings.html?page=about' }); 
+        });
+
+        settingsButton.addEventListener('click', function() {
+            chrome.tabs.create({ url: '../pages/settings.html?page=general' }); 
         });
     });
 });
