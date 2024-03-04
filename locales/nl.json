@@ -7,6 +7,12 @@
     "text.settings": "Instellingen",
     "text.settings.theme": "Theme",
     "text.settings.language": "Taal",
-    "text.settings.save": "Opslaan"
+    "text.settings.save": "Opslaan",
+    "text.settings.nohistory.title": "Geen geschiedenis",
+    "text.settings.nohistory.text": "Scrape wat plaatsen om geschiedenis te zien.",
+    "modal.clearhistory.title": "Geschiedenis wissen",
+    "modal.clearhistory.text": "Weet je zeker dat je de geschiedenis wilt wissen?",
+    "modal.clearhistory.cancel": "Annuleren",
+    "modal.clearhistory.clear": "Wissen"
   }
 }

@@ -7,6 +7,12 @@
     "text.settings": "Stillingar",
     "text.settings.theme": "Theme",
     "text.settings.language": "Tungumál",
-    "text.settings.save": "Vista"
+    "text.settings.save": "Vista",
+    "text.settings.nohistory.title": "Engin saga",
+    "text.settings.nohistory.text": "Skrapaðu eitthvað til að sjá sögu.",
+    "modal.clearhistory.title": "Hreinsa sögu",
+    "modal.clearhistory.text": "Ertu viss um að þú viljir hreinsa söguna þína?",
+    "modal.clearhistory.cancel": "Hætta við",
+    "modal.clearhistory.clear": "Hreinsa"
   }
 }
