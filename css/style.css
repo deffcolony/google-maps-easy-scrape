@@ -60,8 +60,8 @@ button.icon svg {
 
 #message {
   font-size: 16px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   text-decoration: none;
 }
 
@@ -211,6 +211,7 @@ body[theme='dark'] td {
 #table-actions {
   display: flex;
   margin: 12px auto;
+  margin-bottom: 0px;
 }
 #scrapeResults {
   margin-top: 20px;

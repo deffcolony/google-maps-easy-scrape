@@ -2,11 +2,13 @@
 
 body[theme='dark'] {
     --primary-color: #007BFF;
+    --primary-dark-color: #0056b3;
     --primary-hover-color: #0056b3;
     --secondary-color: #333;
     --bkg-color-1: #222;
     --bkg-color-2: #333;
     --text-color: #ccc;
+    --table-text-color: #fff;
     --button-group-text-color: #fff;
   
     --dropdown-bg-color: #333;
@@ -30,6 +32,7 @@ body[theme='light'] {
     --bkg-color-1: #f5f5f5;
     --bkg-color-2: #ddd;
     --text-color: #676767;
+    --table-text-color: #000;
     --button-group-text-color: #333;
   
     --dropdown-bg-color: #fff;
@@ -77,6 +80,30 @@ button.btn.btn-primary:disabled {
     background-color: #ccc;
     color: #fff;
     cursor: not-allowed;
+}
+button.btn.btn-secondary {
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 64px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button.btn.btn-secondary:hover {
+    background-color: #555;
+}
+button.btn.btn-danger {
+    background-color: var(--color-red);
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 64px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button.btn.btn-danger:hover {
+    background-color: #ff3333;
 }
 
 button.icon {
@@ -152,13 +179,13 @@ table td {
     padding: 12px;
     border-bottom: 1px solid var(--table-border-color);
     background-color: var(--bkg-color-1);
+    color: var(--table-text-color);
 }
 table tr:last-child td {
     border-bottom: none;
 }
-table tr:hover {
-    background-color: var(--primary-color);
-    color: #fff;
+table td *{
+    color: var(--table-text-color);
 }
 table thead {
     background-color: var(--primary-color);
@@ -166,6 +193,7 @@ table thead {
 table thead th {
     background-color: var(--primary-color);
     border-bottom: 1px solid var(--table-border-color);
+    color: #fff;
 }
 
 
@@ -195,11 +223,11 @@ table thead th {
     max-width: 600px;
     width: 100%;
 }
-.page-section>#inner>.header .icon {
+.page-section>#inner>.header div.icon {
     transition: filter 0.3s;
 }
 
-.page-section:hover>#inner>.header .icon {
+.page-section:hover>#inner>.header div.icon {
     filter: drop-shadow(0 0 4px var(--primary-color));
 }
 
@@ -285,8 +313,10 @@ table thead th {
 }
 .dropdown.open {
     background-color: var(--primary-color);
-    color: #fff;
     border-radius: 8px 8px 0 0;
+}
+.dropdown.open p {
+    color: #fff;
 }
 
 .dropdown-dialog {
@@ -318,4 +348,12 @@ table thead th {
 .dropdown-dialog .item:hover {
     background-color: var(--primary-color);
     color: #fff;
+}
+
+.card {
+    border-radius: 8px;
+    border: 1px solid var(--table-border-color);
+    background-color: var(--bkg-color-1);
+    padding: 20px;
+    width: 100%;
 }

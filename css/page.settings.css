@@ -58,6 +58,12 @@ body .sidebar-left .nav .item .icon {
 body .sidebar-left .nav .item.active .icon svg {
     fill: white;
 }
+body.hide-sidebar .sidebar-left {
+    display: none;
+}
+body.hide-sidebar .page-text {
+    display: none;
+}
 .page-text {
     display: none;
 }
