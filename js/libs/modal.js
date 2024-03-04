@@ -10,7 +10,7 @@ const createModal = function (id, title, body, footer, settings) {
     const modal = $(`
         <div class="modal" id="${id}-${randomid}" tabindex="-1" >
             <div class="header">
-                <div class="title"><span>${title}</span></div>
+                <div class="title"><span ${ settings && settings.title_i18n ? `data-i18n="${settings.title_i18n}"` : ''}	>${title}</span></div>
                 ${ settings && settings.showclosebutton ? ` <div class="close"><span>&times;</span></div>` : ''}
             </div>
             <div class="content"><div class="inner">${body}</div></div>
@@ -75,19 +75,21 @@ const modalAPI = {
             throw new Error('Modal does not exist')
         }
         const modal = modalmap.get(id)
-        // modal.removeClass('active')
+        modal.removeClass('active')
         // check if there is any other modal open
         if (modalmap.size > 1) {
             modalmap.delete(id)
-            modal.remove()
+            setTimeout(() => {
+                modal.remove()
+            });
             return
         }
         modalContainer.removeClass('show')
         modalContainer.addClass('hide')
         $('body').removeClass('modal-open')
-        modal.remove()
-        // setTimeout(() => {
-        // }, 500);
+        setTimeout(() => {
+            modal.remove()
+        }, 500);
     },
     minimizeModal: function (id) {
         const modal = modalmap.get(id)

@@ -7,15 +7,19 @@
   <title>Google Maps Easy Scrape</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/style.css">
-  <script src="js/i18n.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/vars.css">
+  <script src="/js/libs/jquery.js"></script>
+  <script src="/js/libs/modal.js" async></script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/theme.js" async></script>
 </head>
 <body>
-  <div class="popup-header">
+    <div id="modal-container" class="modal-container"></div>
+    <div class="popup-header">
     <div class="left" style="display: flex; gap: 8px; align-items: center; justify-content: center;">
       <div style="display: flex; gap: 8px;">
-        <button class="icon" id="ext-settings" style="margin: 0;">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>wrench</title><path d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z" /></svg>
+        <button class="icon" id="ext-settings" style="margin: 0;" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" /></svg>
         </button>
       </div>
       <h1>Google Maps Easy Scrape</h1>
@@ -27,10 +31,22 @@
     </div>
   </div>
 
-  <div id="message">Checking URL...</div>
   
   <!-- Filename Input -->
-  <input type="text" id="filenameInput" class="input" placeholder="Custom Filename" disabled>
+  <div class="card" style="margin: 0;">
+    <div id="message">Checking URL...</div>
+    <div id="table-actions">
+      <button id="scrapeButton" class="icon" title="Scrape">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.1,1.81L12.27,4.64C11.5,5.42 11.5,6.69 12.27,7.47L13.68,8.88L9.13,13.43L6.31,10.6L4.89,12C-0.06,17 3.5,20.5 3.5,20.5C3.5,20.5 7,24 12,19.09L13.41,17.68L10.61,14.88L15.15,10.34L16.54,11.73C17.32,12.5 18.59,12.5 19.37,11.73L22.2,8.9L15.1,1.81M17.93,10.28L16.55,8.9L15.11,7.46L13.71,6.06L15.12,4.65L19.35,8.88L17.93,10.28Z" /></svg>
+      </button>
+      <button id="savescrape" class="icon" disabled title="Save">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" /></svg>
+      </button>
+      <button id="downloadCsvButton" class="icon" disabled title="Download as CSV">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A7 7 0 0 0 5 9C5 14.25 12 22 12 22S19 14.25 19 9A7 7 0 0 0 12 2M7.5 10H10V5H14V10H16.5L12 14.5Z" /></svg>
+      </button> 
+    </div>
+  </div>
   <div id="scrapeResults">
     <table id="resultsTable">
       <thead>
@@ -39,16 +55,6 @@
         </tr>
       </thead>
       <tbody>
-
-        <!-- Table Body -->
-        <div id="table-actions">
-          <button id="actionButton" class="icon" title="Scrape">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.1,1.81L12.27,4.64C11.5,5.42 11.5,6.69 12.27,7.47L13.68,8.88L9.13,13.43L6.31,10.6L4.89,12C-0.06,17 3.5,20.5 3.5,20.5C3.5,20.5 7,24 12,19.09L13.41,17.68L10.61,14.88L15.15,10.34L16.54,11.73C17.32,12.5 18.59,12.5 19.37,11.73L22.2,8.9L15.1,1.81M17.93,10.28L16.55,8.9L15.11,7.46L13.71,6.06L15.12,4.65L19.35,8.88L17.93,10.28Z" /></svg>
-          </button>
-          <button id="downloadCsvButton" class="icon" disabled title="Download as CSV">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A7 7 0 0 0 5 9C5 14.25 12 22 12 22S19 14.25 19 9A7 7 0 0 0 12 2M7.5 10H10V5H14V10H16.5L12 14.5Z" /></svg>
-          </button> 
-        </div>
       </tbody>
     </table>
   </div>

@@ -1,39 +1,130 @@
+const trustedDomains = [
+    'https://www.google.com/maps/search',
+    'https://www.google.com/maps/place',
+    'https://www.google.com/maps/dir',
+    'https://www.google.com/maps/@',
+    'https://www.google.com/maps/embed',
+    'https://www.google.com/maps/d/',
+    'https://www.google.com/maps/timeline',
+    'https://www.google.com/maps/reserve',
+]
+
+// const placeholder_item = [{
+//     scrapedate : "2021-01-01",
+//     places : [
+//         {
+//             title : "Title",
+//             rating : "Rating",
+//             reviewCount : "ReviewCount",
+//             phone : "Phone",
+//             industry : "Industry",
+//             address : "Address",
+//             companyUrl : "CompanyUrl",
+//             href : "Href"
+//         },
+//         {
+//             title : "Title",
+//             rating : "Rating",
+//             reviewCount : "ReviewCount",
+//             phone : "Phone",
+//             industry : "Industry",
+//             address : "Address",
+//             companyUrl : "CompanyUrl",
+//             href : "Href"
+//         }
+//     ],
+// }, {
+//     scrapedate : "2021-01-01",
+//     places : [
+//         {
+//         }
+//     ],
+// }];
+
+
+const saveScrapeData = (data) => {
+    console.log('data', data);
+    // save to history
+    chrome.storage.local.get(['history'], (result) => {
+        try {
+            var history = result.history || [];
+            history.push({
+                // format date : "DD-MM-YYYY"
+                scrapedate: new Date().toLocaleDateString('en-GB'),
+                places: data
+            });
+            chrome.storage.local.set({ history: history });
+
+            // show notification
+            const m = new modalCreator(
+                "save-scrape",
+                "Scrape saved!",
+                "The scrape has been saved to your history.",
+                "",
+                {}
+            )
+            m.create();
+            m.show();
+            setTimeout(() => {
+                modalAPI.removeModal(m.id);
+            }, 3000);
+        } catch (error) {
+            console.error(error);
+            const m = new modalCreator(
+                "error-scrape",
+                "Error!",
+                `An error occurred while saving the scrape: ${error.message}`,
+                "",
+                {}
+            )
+            m.create();
+            m.show();
+            setTimeout(() => {
+                modalAPI.removeModal(m.id);
+            }, 10000);
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // add dark theme attr to the body
 
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var currentTab = tabs[0];
-        var actionButton = document.getElementById('actionButton');
-        var downloadCsvButton = document.getElementById('downloadCsvButton');
-        var resultsTable = document.getElementById('resultsTable');
-        var filenameInput = document.getElementById('filenameInput');
+        const scrapeButton = document.getElementById('scrapeButton');
+        const downloadCsvButton = document.getElementById('downloadCsvButton');
+        const resultsTable = document.getElementById('resultsTable');
         const scrapeResults = document.getElementById('scrapeResults');
         const infobutton = document.getElementById('about-ext');
         const settingsButton = document.getElementById('ext-settings');
+        const savescrape = document.getElementById('savescrape');
 
         if (currentTab && currentTab.url.includes("://www.google.com/maps/search")) {
             document.getElementById('message').textContent = "Click the shovel below to scrape the data from the current Google Maps search results.";
-            actionButton.disabled = false;
-            actionButton.classList.add('enabled');
+            scrapeButton.disabled = false;
+            scrapeButton.classList.add('enabled');
         } else {
-            var messageElement = document.getElementById('message');
-            messageElement.innerHTML = '';
-            var linkElement = document.createElement('a');
-            linkElement.href = 'https://www.google.com/maps/search/';
-            linkElement.textContent = "Go to Google Maps Search.";
-            linkElement.target = '_blank'; 
-            messageElement.appendChild(linkElement);
-
-            actionButton.style.display = 'none'; 
-            downloadCsvButton.style.display = 'none';
-            filenameInput.style.display = 'none'; 
+            var messageElement = $("#message");
+            messageElement.text("Please open a Google Maps search results page to use this extension.");
+            messageElement.css("color", "red");
+            const button = $("<button>").text("Open Google Maps").addClass("btn btn-primary").click(function() {
+                chrome.tabs.create({ url: 'https://www.google.com/maps/search/' });
+            });
+            messageElement.append(button);
+            // set disabled to true
+            scrapeButton.disabled = true;
+            $("#table-actions, #scrapeResults").hide();
         }
+        let global_results = [];
 
-        actionButton.addEventListener('click', function() {
+        scrapeButton.addEventListener('click', function() {
+            var messageElement = $("#message");
+            messageElement.text("Scraping data from the current Google Maps search results...");
             chrome.scripting.executeScript({
                 target: {tabId: currentTab.id},
                 function: scrapeData
             }, function(results) {
+                messageElement.text("Scraping complete!");
                 scrapeResults.classList.add('visible');
                 while (resultsTable.firstChild) {
                     resultsTable.removeChild(resultsTable.firstChild);
@@ -51,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add new results to the table
                 if (!results || !results[0] || !results[0].result) return;
+                global_results = results[0].result;
                 results[0].result.forEach(function(item) {
                     var row = document.createElement('tr');
                     ['title', 'rating', 'reviewCount', 'phone', 'industry', 'address', 'companyUrl', 'href'].forEach(function(key) {
@@ -68,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (results && results[0] && results[0].result && results[0].result.length > 0) {
                     downloadCsvButton.disabled = false;
+                    savescrape.disabled = false;
                 }
             });
         });
@@ -89,6 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         settingsButton.addEventListener('click', function() {
             chrome.tabs.create({ url: '../pages/settings.html?page=general' }); 
+        });
+
+        savescrape.addEventListener('click', function() {
+            saveScrapeData(global_results);
         });
     });
 });

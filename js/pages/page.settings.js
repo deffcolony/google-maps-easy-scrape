@@ -77,6 +77,20 @@ function openUrl(url) {
         chrome.tabs.create({url: url});
     }
 }
+
+const openModal = (modal) => {
+    const m = new modalCreator(
+        modal.id,
+        modal.title,
+        modal.body,
+        modal.footer,
+        {}
+    )
+    m.create();
+    m.show();
+    return m;
+}
+
 const watchEventsFromIframe = () => {
     window.addEventListener('message', function(event) {
         switch (event.data.type) {
@@ -107,8 +121,28 @@ const watchEventsFromIframe = () => {
                 case 'openUrl':
                     openUrl(event.data.url);
                     break;
+                case 'openModal':
+                    const m = openModal(event.data.modal);
+                    if (event.data.functionAfter) {
+                        event.data.functionAfter(m);
+                    }
+                    // return 
+                    break;
                 default:
                     console.log('Unknown action event', event.data);
+                    break;
+            }
+        }
+        if (event.data.ui) {
+            switch (event.data.ui) {
+                case 'sidebar-hide':
+                    $('body').addClass('hide-sidebar');
+                    break;
+                case 'sidebar-show':
+                    $('body').removeClass('hide-sidebar');
+                    break;
+                default:
+                    console.log('Unknown ui event', event.data);
                     break;
             }
         }

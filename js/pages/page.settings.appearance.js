@@ -5,22 +5,22 @@ const sendMessage = (message) => {
 document.addEventListener('DOMContentLoaded', async function() {
     const group = new buttonGroup('themeSelect');
 
-    const flashbangMeme = (stack) => {
+    const flashbangMeme = () => {
         const m_body = `
-        <a href="https://www.youtube.com/watch?v=QOhmcbfwxnA" target="_blank">
+        <a href="https://www.youtube.com/watch?v=epkp1whEW3E&t=16s" target="_blank">
             <img src="/images/flashbang.jpg" alt="Flashbang" style="width: 100%; max-width: 300px;">
         </a>
 
         `;
         const m_footer = `
         <div style="display: flex; justify-content: space-between; gap: 12px;">
-            <button class="btn btn-primary btn-modal" id="cloasemodal" data-dismiss="modal">What have i done?</button>
+            <button class="btn btn-primary btn-modal" id="cloasemodal" data-dismiss="modal">Burn my retinas!</button>
             <button class="btn btn-primary btn-modal" id="returntodarn" data-dismiss="modal">Return to the dark side!</button>
         </div>
             `;
         const modal = new modalCreator(
             "flashbang",
-            "Flashbang!",
+            "I choose flashbang!",
             m_body,
             m_footer,
             {}
@@ -29,13 +29,22 @@ document.addEventListener('DOMContentLoaded', async function() {
         modal.show();
         $(`#${m.id} #cloasemodal`).click(function() {
             modalAPI.removeModal(m.id);
+            window.parent.postMessage({
+                ui: 'sidebar-show'
+            }, '*');
         });
         $(`#${m.id} #returntodarn`).click(function() {
             modalAPI.removeModal(m.id);
             setTheme('dark');
             sendMessage({ type: 'setTheme', theme: 'dark' });
             group.setValue('dark');
+            window.parent.postMessage({
+                ui: 'sidebar-show'
+            }, '*');
         });
+        window.parent.postMessage({
+            ui: 'sidebar-hide'
+        }, '*');
     }
 
 
