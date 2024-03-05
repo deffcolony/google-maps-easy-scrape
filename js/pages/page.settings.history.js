@@ -51,7 +51,10 @@ const viewHistory = (history) => {
 
     const m_body = `
     <div class="card">
-        <h2 data-i18n="modal.history.view.title">History</h2>
+        <div style="display: flex; gap: 18px; margin: 0;" class="card-header">
+            <h2 data-i18n="modal.history.view.title">History</h2>
+            <p data-i18n="modal.history.view.text">Showing ${history.places.length} places</p>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -60,7 +63,9 @@ const viewHistory = (history) => {
                     <th data-i18n="modal.history.view.rating">Rating</th>
                 </tr>
             </thead>
-            ${places.html()}
+            <tbody id="history-table">
+                ${places.html()}
+            </tbody>
         </table>
         </div>
     `;
@@ -78,6 +83,40 @@ const viewHistory = (history) => {
     )
     const m = modal.create();
     modal.show();
+
+    const d = new dropdown("sortby");
+    d.addItems([
+        {text: "Name", value: "name"},
+        {text: "Rating", value: "rating"},
+    ])
+    d.setValue("name");
+    $(`#${m.id} .card-header`).append(d.draw());
+    d.init();
+
+    d.on('change', function(event) {
+        console.log('Sort by', event.detail.value);
+        $(`#${m.id} #history-table`).html(places.html());
+        const sorted = history.places.sort((a, b) => {
+            if (event.detail.value === "name") {
+                return a.title.localeCompare(b.title);
+            } else if (event.detail.value === "rating") {
+                return b.rating - a.rating;
+            }
+        });
+
+        $(`#${m.id} #history-table`).empty();
+
+        sorted.forEach((item, index) => {
+            $(`#${m.id} #history-table`).append(`
+                <tr>
+                    <td>${item.title}</td>
+                    <td><a href="${item.href}" target="_blank" rel="noopener noreferrer">View map</a></td>
+                    <td>${item.rating}</td>
+                </tr>
+            `);
+        });
+    });
+
     $(`#${m.id} #close`).click(function() {
         modalAPI.removeModal(m.id);
     });
