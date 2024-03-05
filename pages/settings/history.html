@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <script src="/js/libs/jquery.js"></script> -->
-    <!-- <script src="/js/libs/modal.js" async></script> -->
+    <script src="/js/libs/jquery.js"></script>
+    <script src="/js/libs/modal.js" async></script>
     <script src="/js/theme.js"></script>
     <script src="/js/i18n.js" async></script>
-    <!-- <script src="/js/ui.components.js" async></script> -->
-    <!-- <script src="/js/pages/page.settings.history.js" async></script> -->
+    <script src="/js/ui.components.js" async></script>
+    <script src="/js/pages/page.settings.history.js" async></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/page.settings.page.css">
 </head>
@@ -22,10 +22,15 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>history</title><path d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3" /></svg>
                 </div>
                 <h1 data-i18n="text.history"></h1>
+                <div style="margin-left: auto;">
+                    <button class="icon" title="Clear history" id="clear-history">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
+                    </button>
+                </div>
             </div>
             <div class="content">
                 <div class="table-outter">
-                    <table>
+                    <table id="history-table">
                         <thead>
                             <tr>
                                 <th>Scrape Date</th>
@@ -34,8 +39,21 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td colspan="3" id="nohistorystatus">
+                                    <div style="display: flex; gap: 18px; margin: 0;" class="card">
+                                        <div class="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>sim-alert-outline</title><path d="M13 13H11V7H13M13 17H11V15H13M18 4V20H6V8.8L10.8 4H18M18 2H10L4 8V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V4C20 2.9 19.1 2 18 2Z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h2 data-i18n="text.settings.nohistory.title" >No history found</h2>
+                                            <p  data-i18n="text.settings.nohistory.text" >Scrape some places to see history</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                             <!-- placeholder -->
-                            <tr>
+                            <!-- <tr>
                                 <td>2021-01-01</td>
                                 <td>100</td>
                                 <td>
@@ -62,7 +80,7 @@
                                         </button>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
