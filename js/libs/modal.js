@@ -8,7 +8,7 @@ const modalContainer = $('#modal-container')
 const createModal = function (id, title, body, footer, settings) {
     const randomid = Math.random().toString(36).substring(7);
     const modal = $(`
-        <div class="modal" id="${id}-${randomid}" tabindex="-1" >
+        <div class="modal ${settings && settings.class || ""}" id="${id}-${randomid}" tabindex="-1" >
             <div class="header">
                 <div class="title"><span ${ settings && settings.title_i18n ? `data-i18n="${settings.title_i18n}"` : ''}	>${title}</span></div>
                 ${ settings && settings.showclosebutton ? ` <div class="close"><span>&times;</span></div>` : ''}

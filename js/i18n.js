@@ -21,7 +21,21 @@ function getCurrentTime() {
 function log(message, level = 'INFO') {
   const timestamp = getCurrentTime();
   const colorConfig = logColors[level] || logColors.DEFAULT;
-  console.log(`%c[${timestamp}][${level}]`, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, message);
+  const template = `%c[${timestamp}][${level}]%c ${message}`;
+
+  switch (level) {
+    case 'INFO':
+      console.log(template, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, '');
+      break;
+    case 'WARNING':
+      console.warn(template, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, '');
+      break;
+    case 'ERROR':
+      console.error(template, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, '');
+      break;
+    default:
+      console.log(template, `background: ${colorConfig.background}; color: ${colorConfig.color}; padding: 2px 6px; border-radius: 4px;`, '');
+  }
 }
   
 // log('i18n script loaded', 'INFO');

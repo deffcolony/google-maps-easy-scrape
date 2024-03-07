@@ -1,7 +1,6 @@
 @import url(./modal.css);
 
 body[theme='dark'] {
-    --primary-color: #007BFF;
     --primary-dark-color: #0056b3;
     --primary-hover-color: #0056b3;
     --secondary-color: #333;
@@ -22,12 +21,15 @@ body[theme='dark'] {
   
     --color-red: #ff4d4d;
 
+    --text-color-on-primary: #fff;
+    --text-color-on-danger-color: #fff;
+
     background-color: #333;
 }
   
 body[theme='light'] {
-    --primary-color: #1A73E8;
-    --primary-hover-color: #1b66c9;
+    --primary-dark-color: #0056b3;
+    --primary-hover-color: #0056b3;
     --secondary-color: #dddddd;
     --bkg-color-1: #f5f5f5;
     --bkg-color-2: #ddd;
@@ -46,7 +48,21 @@ body[theme='light'] {
   
     --color-red: #ff4d4d;
 
+    --text-color-on-primary: #fff;
+    --text-color-on-danger-color: #fff;
+
     background-color: #fff;
+}
+
+body[theme='dark'],
+body[theme='light'] {
+    --primary-color: #007BFF;
+    --text-color-on-primary: #fff;
+    --text-color-on-danger-color: #fff;
+}
+
+body[theme='custom'] {
+    background-color: var(--page-bkg-color);
 }
 
 
@@ -66,7 +82,7 @@ h1 {
 
 button.btn.btn-primary {
     background-color: var(--primary-color);
-    color: #fff;
+    color: var(--text-color-on-primary);
     padding: 12px 24px;
     border: none;
     border-radius: 64px;
@@ -83,7 +99,7 @@ button.btn.btn-primary:disabled {
 }
 button.btn.btn-secondary {
     background-color: var(--secondary-color);
-    color: #fff;
+    color: var(--text-color-on-primary);
     padding: 12px 24px;
     border: none;
     border-radius: 64px;
@@ -95,7 +111,7 @@ button.btn.btn-secondary:hover {
 }
 button.btn.btn-danger {
     background-color: var(--color-red);
-    color: #fff;
+    color: var(--text-color-on-danger-color);
     padding: 12px 24px;
     border: none;
     border-radius: 64px;
@@ -139,6 +155,9 @@ div.icon svg {
     display: block;
     width: 24px;
     height: 24px;
+}
+div.icon.ico-white svg {
+    fill: var(--text-color-on-primary);
 }
 div.icon.color-red svg {
     fill: var(--color-red);
@@ -193,9 +212,20 @@ table thead {
 table thead th {
     background-color: var(--primary-color);
     border-bottom: 1px solid var(--table-border-color);
-    color: #fff;
+    color: var(--text-color-on-primary);
 }
 
+.alert.alert-warning {
+    background-color: #ffcc00;
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 64px;
+    border: 1px solid #ffcc00;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px;
+}
 
 .fullwidth {
     width: 100%;
@@ -258,7 +288,7 @@ table thead th {
     background-color: var(--primary-color);
 }
 .button-group .item:hover p {
-    color: #fff;
+    color: var(--text-color-on-primary);
 }
 .button-group .item:hover div.icon svg {
     fill: #fff;
@@ -270,7 +300,7 @@ table thead th {
     background-color: var(--primary-color);
 }
 .button-group .item.active p {
-    color: #fff;
+    color: var(--text-color-on-primary);
 }
 .button-group div.icon {
     padding: 0;
@@ -316,38 +346,65 @@ table thead th {
     border-radius: 8px 8px 0 0;
 }
 .dropdown.open p {
-    color: #fff;
+    color: var(--text-color-on-primary);
 }
 
 .dropdown-dialog {
-    top: 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.0);
+    pointer-events: none;
+}
+.dropdown-dialog>.dismiss-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: all;
+}
+.dropdown-dialog.open {
+    background-color: rgba(0,0,0,0.5);
+    pointer-events: all;
+    transition: background-color 0.3s linear;
+}
+.dropdown-dialog .body {
     position: absolute;
     background-color: var(--dropdown-bg-color);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 5000;
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px;
     border: 1px solid var(--table-border-color);
     overflow: auto;
     max-height: 500px;
+    width: 100%;
 }
-.dropdown-dialog::-webkit-scrollbar {
+.dropdown-dialog .body::-webkit-scrollbar {
     width: 8px;
 }
-.dropdown-dialog::-webkit-scrollbar-thumb {
+.dropdown-dialog .body::-webkit-scrollbar-thumb {
     background-color: var(--primary-color);
     border-radius: 8px;
 }
 .dropdown-dialog .item {
     color: var(--dropdown-text-color);
-    padding: 12px 24px;
+    padding-left: 24px;
+    height: 32px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+}
+/* item item-select */
+.dropdown-dialog .item-select {
+    background-color: var(--primary-color);
+    color: var(--text-color-on-primary);
 }
 .dropdown-dialog .item:hover {
     background-color: var(--primary-color);
-    color: #fff;
+    color: var(--text-color-on-primary);
 }
 
 .card {

@@ -96,10 +96,19 @@ const watchEventsFromIframe = () => {
         switch (event.data.type) {
             case 'setTheme':
                 setTheme(event.data.theme);
+                if (!event.data.theme || event.data.theme != 'custom') {
+                    clearColors();
+                }
                 chrome.storage.sync.set({ theme: event.data.theme }, () => {
                     console.log('Theme saved', event.data.theme);
                 });
     	        break;
+            case "reloadCustomColors":
+                clearColors();
+                getSavedColors().then((colors) => {
+                    applyColors(colors);
+                });
+                break;
 
             case 'setPage':
                 loadSettingsPage(event.data.page);
@@ -120,13 +129,6 @@ const watchEventsFromIframe = () => {
             switch (event.data.action) {
                 case 'openUrl':
                     openUrl(event.data.url);
-                    break;
-                case 'openModal':
-                    const m = openModal(event.data.modal);
-                    if (event.data.functionAfter) {
-                        event.data.functionAfter(m);
-                    }
-                    // return 
                     break;
                 default:
                     console.log('Unknown action event', event.data);

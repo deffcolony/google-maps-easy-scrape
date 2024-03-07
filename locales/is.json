@@ -10,6 +10,7 @@
     "text.settings.save": "Vista",
     "text.settings.nohistory.title": "Engin saga",
     "text.settings.nohistory.text": "Skrapaðu eitthvað til að sjá sögu.",
+    "modal.history.view": "Sjá sögu",
     "modal.clearhistory.title": "Hreinsa sögu",
     "modal.clearhistory.text": "Ertu viss um að þú viljir hreinsa söguna þína?",
     "modal.clearhistory.cancel": "Hætta við",

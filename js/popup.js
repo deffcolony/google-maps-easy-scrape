@@ -54,20 +54,31 @@ const saveScrapeData = (data) => {
                 places: data
             });
             chrome.storage.local.set({ history: history });
+            const m_footer = `
+            <div style="display: flex; gap: 18px; margin: 0;" class="fullwidth">
+            <button class="fullwidth btn btn-primary" id="view">View history</button>
+                <button class="fullwidth btn btn-primary" id="close">Close</button>
+            </div>`;
 
             // show notification
             const m = new modalCreator(
                 "save-scrape",
-                "Scrape saved!",
+                "Scrape saved! 🎉",
                 "The scrape has been saved to your history.",
-                "",
-                {}
+                m_footer,
+                {
+                    class: "modal-md"
+                }
             )
             m.create();
             m.show();
-            setTimeout(() => {
+            $(`#${m.id} #view`).click(() => {
                 modalAPI.removeModal(m.id);
-            }, 3000);
+                chrome.tabs.create({ url: '../pages/settings.html?page=history' });
+            });
+            $(`#${m.id} #close`).click(() => {
+                modalAPI.removeModal(m.id);
+            });
         } catch (error) {
             console.error(error);
             const m = new modalCreator(
@@ -104,16 +115,31 @@ document.addEventListener('DOMContentLoaded', function() {
             scrapeButton.disabled = false;
             scrapeButton.classList.add('enabled');
         } else {
-            var messageElement = $("#message");
-            messageElement.text("Please open a Google Maps search results page to use this extension.");
-            messageElement.css("color", "red");
-            const button = $("<button>").text("Open Google Maps").addClass("btn btn-primary").click(function() {
-                chrome.tabs.create({ url: 'https://www.google.com/maps/search/' });
-            });
-            messageElement.append(button);
+            const messageElement = $("#message");
             // set disabled to true
             scrapeButton.disabled = true;
             $("#table-actions, #scrapeResults").hide();
+
+            // check if the current tab is a trusted domain
+            var isTrustedDomain = false;
+            for (var i = 0; i < trustedDomains.length; i++) {
+                if (currentTab.url.includes(trustedDomains[i])) {
+                    isTrustedDomain = true;
+                    break;
+                }
+            }
+            if (isTrustedDomain) {
+                messageElement.text("Head over to the search bar to start scraping data from Google Maps.");
+                messageElement.css("color", "yellow");
+            }
+            if (!isTrustedDomain) {
+                messageElement.text("This extension only works on Google Maps search results pages.");
+                messageElement.css("color", "red");
+                const button = $("<button>").text("Open Google Maps").addClass("btn btn-primary").click(function() {
+                    chrome.tabs.create({ url: 'https://www.google.com/maps/search/' });
+                });
+                messageElement.append(button);
+            }
         }
         let global_results = [];
 
@@ -190,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 function scrapeData() {
     var links = Array.from(document.querySelectorAll('a[href^="https://www.google.com/maps/place"]'));
     return links.map(link => {
@@ -259,10 +284,12 @@ function scrapeData() {
 
         // Phone Numbers
         if (container) {
-            var containerText = container.textContent || '';
-            var phoneRegex = /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/;
-            var phoneMatch = containerText.match(phoneRegex);
-            phone = phoneMatch ? phoneMatch[0] : '';
+            // find the class "UsdlK" and get the phone number
+            var phoneContainer = container.querySelector('.UsdlK');
+            if (phoneContainer) {
+                phone = phoneContainer.textContent;
+            }
+            
         }
 
         // Return the data as an object

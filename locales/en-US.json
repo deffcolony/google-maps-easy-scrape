@@ -10,6 +10,7 @@
     "text.settings.save": "Save",
     "text.settings.nohistory.title": "No history",
     "text.settings.nohistory.text": "Scrape some places to see history.",
+    "modal.history.view": "View history",
     "modal.clearhistory.title": "Clear history",
     "modal.clearhistory.text": "Are you sure you want to clear your history?",
     "modal.clearhistory.cancel": "Cancel",
