@@ -31,6 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const lang = event.detail.value;
         setLanguage(lang);
     });
+    // get current language
+    chrome.storage.sync.get(['language'], function(result) {
+        lang.setValue(result.language);
+    });
 
     // saveGeneralButton
     // $("#saveGeneralButton").click(function() {

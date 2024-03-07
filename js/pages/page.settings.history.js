@@ -2,11 +2,9 @@ const getHistory = async () => {
     return await new Promise((resolve, reject) => {
         chrome.storage.local.get(['history'], (result) => {
             if (!result.history) {
-                console.log("%cNo history found", "color: red;")
                 resolve([]);
                 return;
             }
-            console.log('%cHistory found', 'color: lime;', result.history);
             resolve(result.history);
         });
     });
@@ -43,8 +41,9 @@ const viewHistory = (history) => {
         places.append(`
             <tr>
                 <td>${item.title}</td>
+                <td>${item.phone}</td>
                 <td><a href="${item.href}" target="_blank" rel="noopener noreferrer">View map</a></td>
-                <td>${item.rating}</td>
+                <td>${item.rating} (${item.reviewCount || 0})</td>
             </tr>
         `);
     });
@@ -55,19 +54,22 @@ const viewHistory = (history) => {
             <h2 data-i18n="modal.history.view.title">History</h2>
             <p data-i18n="modal.history.view.text">Showing ${history.places.length} places</p>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th data-i18n="modal.history.view.title">Name</th>
-                    <th data-i18n="modal.history.view.map">Map</th>
-                    <th data-i18n="modal.history.view.rating">Rating</th>
-                </tr>
-            </thead>
-            <tbody id="history-table">
-                ${places.html()}
-            </tbody>
-        </table>
+        <div class="table-outter">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th data-i18n="modal.history.view.title">Name</th>
+                        <th data-i18n="modal.history.view.map">Map</th>
+                        <th data-i18n="modal.history.view.phone">Phone</th>
+                        <th data-i18n="modal.history.view.rating">Rating (Reviews)</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table">
+                    ${places.html()}
+                </tbody>
+            </table>
         </div>
+    </div>
     `;
     const m_footer = `
     <div style="display: flex; justify-content: space-between; gap: 12px;">
@@ -79,7 +81,10 @@ const viewHistory = (history) => {
         "View history",
         m_body,
         m_footer,
-        {}
+        {
+            class: "modal-exlg",
+            title_i18n: "modal.history.view",
+        }
     )
     const m = modal.create();
     modal.show();
@@ -87,20 +92,38 @@ const viewHistory = (history) => {
     const d = new dropdown("sortby");
     d.addItems([
         {text: "Name", value: "name"},
-        {text: "Rating", value: "rating"},
+        {text: "Ratings", value: "ratingCount"},
+        {text: "Reviews", value: "reviewCount"},
+        {text: "Reviews And Ratings", value: "reviewRatingCount"},
+        {text: "Ratings And Reviews", value: "ratingReviewCount"},
     ])
     d.setValue("name");
-    $(`#${m.id} .card-header`).append(d.draw());
+    $(`#${m.id} .card-header`).append(d.draw({
+        style: "margin-left: auto; max-width: 250px;"
+    }));
     d.init();
 
     d.on('change', function(event) {
         console.log('Sort by', event.detail.value);
         $(`#${m.id} #history-table`).html(places.html());
         const sorted = history.places.sort((a, b) => {
-            if (event.detail.value === "name") {
-                return a.title.localeCompare(b.title);
-            } else if (event.detail.value === "rating") {
-                return b.rating - a.rating;
+            switch (event.detail.value) {
+                case "name": return a.title.localeCompare(b.title);
+                case "ratingCount": return b.rating - a.rating;
+                case "reviewCount": return b.reviewCount - a.reviewCount;
+                case "reviewRatingCount": 
+                    // sort by review count, then by rating
+                    if (b.reviewCount === a.reviewCount) {
+                        return b.rating - a.rating;
+                    }
+                    return b.reviewCount - a.reviewCount;
+                case "ratingReviewCount":
+                    // sort by rating, then by review count
+                    if (b.rating === a.rating) {
+                        return b.reviewCount - a.reviewCount;
+                    }
+                    return b.rating - a.rating;
+                default: return a.title.localeCompare(b.title);
             }
         });
 
@@ -110,8 +133,9 @@ const viewHistory = (history) => {
             $(`#${m.id} #history-table`).append(`
                 <tr>
                     <td>${item.title}</td>
+                    <td>${item.phone}</td>
                     <td><a href="${item.href}" target="_blank" rel="noopener noreferrer">View map</a></td>
-                    <td>${item.rating}</td>
+                    <td>${item.rating} (${item.reviewCount || 0})</td>
                 </tr>
             `);
         });
@@ -120,6 +144,7 @@ const viewHistory = (history) => {
     $(`#${m.id} #close`).click(function() {
         modalAPI.removeModal(m.id);
     });
+    initTranslations();
 };
 
 const createHistoryTable = (history) => {
@@ -139,6 +164,49 @@ const createHistoryTable = (history) => {
 
 document.addEventListener('DOMContentLoaded', async function() {
     const table = $('#history-table tbody');
+
+    const appendHistory = (history) => {
+        try {
+            if (history != undefined) {
+                if (history.length === 0) {
+                    initTranslations();
+                } else {
+                    // empty table
+                    table.empty();
+                    history.reverse();
+                    history.forEach((item, index) => {
+                        table.append(createHistoryTable(item));
+                    });
+                    initTranslations();
+                }
+            } else {
+                console.warn('No history found');
+            }
+        } catch (error) {
+            console.error('Error getting history', error);
+            const m_body = `
+            <p data-i18n="modal.clearhistory.error">An error occurred while getting your history</p><br>
+            <pre>${error.stack}</pre>
+            `;
+            const m_footer = `
+            <div style="display: flex; justify-content: space-between; gap: 12px;">
+                <button data-i18n="text.ok" class="btn btn-primary btn-modal" id="ok" data-dismiss="modal">OK</button>
+            </div>
+                `;
+            const modal = new modalCreator(
+                "err",
+                "Error",
+                m_body,
+                m_footer,
+                {}
+            )
+            const m = modal.create();
+            modal.show();
+            $(`#${m.id} #ok`).click(function() {
+                modalAPI.removeModal(m.id);
+            });
+        }
+    }    
 
     const deleteHistory = () => {
         const m_body = `
@@ -180,46 +248,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     const history = await getHistory();
-    console.log('history', history);
+    appendHistory(history);
+
+    $("#refresh-history").click(async function() {
+        const history = await getHistory();
+        appendHistory(history);
+    });
     
-    try {
-        if (history != undefined) {
-            if (history.length === 0) {
-                initTranslations();
-            } else {
-                // empty table
-                table.empty();
-                history.reverse();
-                history.forEach((item, index) => {
-                    table.append(createHistoryTable(item));
-                });
-                initTranslations();
-            }
-        } else {
-            console.warn('No history found');
-        }
-    } catch (error) {
-        console.error('Error getting history', error);
-        const m_body = `
-        <p data-i18n="modal.clearhistory.error">An error occurred while getting your history</p><br>
-        <pre>${error.stack}</pre>
-        `;
-        const m_footer = `
-        <div style="display: flex; justify-content: space-between; gap: 12px;">
-            <button data-i18n="text.ok" class="btn btn-primary btn-modal" id="ok" data-dismiss="modal">OK</button>
-        </div>
-            `;
-        const modal = new modalCreator(
-            "err",
-            "Error",
-            m_body,
-            m_footer,
-            {}
-        )
-        const m = modal.create();
-        modal.show();
-        $(`#${m.id} #ok`).click(function() {
-            modalAPI.removeModal(m.id);
-        });
-    }
 });

@@ -10,6 +10,7 @@
     "text.settings.save": "Opslaan",
     "text.settings.nohistory.title": "Geen geschiedenis",
     "text.settings.nohistory.text": "Scrape wat plaatsen om geschiedenis te zien.",
+    "modal.history.view": "Bekijk geschiedenis",
     "modal.clearhistory.title": "Geschiedenis wissen",
     "modal.clearhistory.text": "Weet je zeker dat je de geschiedenis wilt wissen?",
     "modal.clearhistory.cancel": "Annuleren",

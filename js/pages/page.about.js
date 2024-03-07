@@ -1,8 +1,11 @@
+const ext_ver = $('#ext-ver');
 // dom loaded
 document.addEventListener('DOMContentLoaded', function() {
     // get buttons with class "url-button"
     const urlButtons = document.querySelectorAll('.url-button');
-    // loop through buttons
+    // loop through buttonsconst ext_ver = $('#ext-ver');
+    ext_ver.text(`Version: ${chrome.runtime.getManifest().version}`);
+
     urlButtons.forEach(function(button) {
         // get the url from the button's data-url attribute
         const url = button.getAttribute('data-url');
