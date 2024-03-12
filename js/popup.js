@@ -244,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (isTrustedDomain) {
                 messageElement.text("Head over to the search bar to start scraping data from Google Maps.");
-                messageElement.css("color", "yellow");
             }
             if (!isTrustedDomain) {
                 messageElement.text("This extension only works on Google Maps search results pages.");
