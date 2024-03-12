@@ -10,11 +10,6 @@ const getHistory = async () => {
     });
 }
 
-// placeholder getHistory
-// const getHistory = () => {
-//     return placeholder_item;
-// }
-
 const noHistory = () => {
     return `
     <tr>
@@ -40,10 +35,10 @@ const viewHistory = (history) => {
     history.places.forEach((item, index) => {
         places.append(`
             <tr>
-                <td>${item.title}</td>
-                <td>${item.phone}</td>
+                <td>${item.title || "N/A"}</td>
+                <td>${item.phone || "N/A"}</td>
                 <td><a href="${item.href}" target="_blank" rel="noopener noreferrer">View map</a></td>
-                <td>${item.rating} (${item.reviewCount || 0})</td>
+                <td>${item.rating || "N/A"} (${item.reviewCount || 0})</td>
             </tr>
         `);
     });
@@ -52,7 +47,6 @@ const viewHistory = (history) => {
     <div class="card">
         <div style="display: flex; gap: 18px; margin: 0;" class="card-header">
             <h2 data-i18n="modal.history.view.title">History</h2>
-            <p data-i18n="modal.history.view.text">Showing ${history.places.length} places</p>
         </div>
         <div class="table-outter">
             <table class="table">
@@ -61,7 +55,8 @@ const viewHistory = (history) => {
                         <th data-i18n="modal.history.view.title">Name</th>
                         <th data-i18n="modal.history.view.map">Map</th>
                         <th data-i18n="modal.history.view.phone">Phone</th>
-                        <th data-i18n="modal.history.view.rating">Rating (Reviews)</th>
+                        <th data-i18n="modal.history.view.rating">
+                        >Rating (Reviews)</th>
                     </tr>
                 </thead>
                 <tbody id="history-table">
@@ -92,10 +87,10 @@ const viewHistory = (history) => {
     const d = new dropdown("sortby");
     d.addItems([
         {text: "Name", value: "name"},
-        {text: "Ratings", value: "ratingCount"},
-        {text: "Reviews", value: "reviewCount"},
-        {text: "Reviews And Ratings", value: "reviewRatingCount"},
-        {text: "Ratings And Reviews", value: "ratingReviewCount"},
+        history.places[0].rating && {text: "Ratings", value: "ratingCount"},
+        history.places[0].reviewCount && {text: "Reviews", value: "reviewCount"},
+        history.places[0].rating && history.places[0].reviewCount && {text: "Reviews And Ratings", value: "reviewRatingCount"},
+        history.places[0].rating && history.places[0].reviewCount && {text: "Ratings And Reviews", value: "ratingReviewCount"},
     ])
     d.setValue("name");
     $(`#${m.id} .card-header`).append(d.draw({
@@ -132,10 +127,10 @@ const viewHistory = (history) => {
         sorted.forEach((item, index) => {
             $(`#${m.id} #history-table`).append(`
                 <tr>
-                    <td>${item.title}</td>
-                    <td>${item.phone}</td>
+                    <td>${item.title || 'N/A'}</td>
+                    <td>${item.phone || 'N/A'}</td>
                     <td><a href="${item.href}" target="_blank" rel="noopener noreferrer">View map</a></td>
-                    <td>${item.rating} (${item.reviewCount || 0})</td>
+                    <td>${item.rating || "N/A"} (${item.reviewCount || 0})</td>
                 </tr>
             `);
         });
@@ -146,19 +141,28 @@ const viewHistory = (history) => {
     });
     initTranslations();
 };
+const deleteHistory = (history) => {
+    console.log('Deleting history', history);
+}    
 
 const createHistoryTable = (history) => {
     let html = $("<tr></tr>")
     html.append(`
         <td>${history.scrapedate}</td>
         <td>${history.places.length}</td>
-        <td style="width: max-content;">
-            <button id="openhistory" style="height: min-content;" class="btn btn-primary btn-sm" data-i18n="modal.history.view">View</button>
+        <td style="width: min-content;">
+            <div style="display: flex; gap: 12px;" style="width: fit-content;"> 
+                <button id="openhistory" class="btn btn-primary btn-sm" data-i18n="modal.history.view">View</button>
+                <button class="icon" id="deletehistory" style="margin: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
+                </button>
+            </div>
         </td>
     `);
     html.find('#openhistory').click(function() {
         viewHistory(history);
     });
+
     return html;
 }
 
