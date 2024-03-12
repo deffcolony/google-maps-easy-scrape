@@ -412,7 +412,11 @@ table thead th {
 
 /*  */
 
-#modal-container > .modal {
+#modal-container > .modal-wrapper {
+
+}
+
+#modal-container > .modal-wrapper > .modal {
     width: -webkit-fill-available;
     width: -moz-available;
     max-width: 800px;
@@ -436,15 +440,15 @@ table thead th {
     flex-direction: column;
 }
 /* scrollbar */
-#modal-container > .modal *::-webkit-scrollbar {
+#modal-container > .modal-wrapper > .modal *::-webkit-scrollbar {
     background-color: var(--bkg-color-1);
     width: 8px;
 }
-#modal-container > .modal *::-webkit-scrollbar-thumb {
+#modal-container > .modal-wrapper > .modal *::-webkit-scrollbar-thumb {
     background-color: var(--primary-color);
     border-radius: 8px;
 }
-#modal-container > .modal.active {
+#modal-container > .modal-wrapper > .modal.active {
     opacity: 1;
     /* bounce */
     transition: transform 0.4s ease-out,
@@ -452,11 +456,8 @@ table thead th {
     ;
     transform: scale(1);
 }
-#modal-container > .modal .content {
+#modal-container > .modal-wrapper > .modal .content {
     padding: 0px;
     overflow: auto;
     flex: 1;
-}
-#modal-container > .modal .content > .inner {
-    padding: 0px;
 }

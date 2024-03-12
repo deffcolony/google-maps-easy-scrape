@@ -8,6 +8,7 @@ const modalContainer = $('#modal-container')
 const createModal = function (id, title, body, footer, settings) {
     const randomid = Math.random().toString(36).substring(7);
     const modal = $(`
+    <div class="modal-wrapper">
         <div class="modal ${settings && settings.class || ""}" id="${id}-${randomid}" tabindex="-1" >
             <div class="header">
                 <div class="title"><span ${ settings && settings.title_i18n ? `data-i18n="${settings.title_i18n}"` : ''}	>${title}</span></div>
@@ -16,6 +17,7 @@ const createModal = function (id, title, body, footer, settings) {
             <div class="content"><div class="inner">${body}</div></div>
             ${ footer ? `<div class="footer">${footer}</div>` : ''}
         </div>
+    </div>
     `);
     if (settings && settings.showclosebutton) {
         modal.find('.close').click(() => {
@@ -70,7 +72,6 @@ const modalAPI = {
         }, 100);
     },
     hideModal: function (id) {
-        $("body").css("overflow", "auto");
         if (!modalmap.has(id)) {
             throw new Error('Modal does not exist')
         }
@@ -81,9 +82,10 @@ const modalAPI = {
             modalmap.delete(id)
             setTimeout(() => {
                 modal.remove()
-            });
+            }, 500);
             return
         }
+        $("body").css("overflow", "auto");
         modalContainer.removeClass('show')
         modalContainer.addClass('hide')
         $('body').removeClass('modal-open')
