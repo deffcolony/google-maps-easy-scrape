@@ -157,12 +157,16 @@ const saveScrapeData = async (data) => {
     });
 
     $(`#${m.id} #confirm`).click(() => {
+    modalAPI.removeModal(m.id);
+
     // save to history
     chrome.storage.local.get(['history'], (result) => {
         try {
             var history = result.history || [];
+            const randid = Math.random().toString(36).substring(7);
             history.push({
                 // format date : "DD-MM-YYYY"
+                id: randid,
                 scrapedate: new Date().toLocaleDateString('en-GB'),
                 places: data
             });

@@ -141,8 +141,68 @@ const viewHistory = (history) => {
     });
     initTranslations();
 };
+
 const deleteHistory = (history) => {
+    const id = history.id;
     console.log('Deleting history', history);
+    const m_body = `
+    <p data-i18n="modal.clear1history.text">Are you sure you want to delete this history?</p><br>
+    <div class="table-outter">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th data-i18n="text.id">ID</th>
+                    <th data-i18n="text.date">Date</th>
+                    <th data-i18n="history.numberofplaces">Number of places</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${id}</td>
+                    <td>${history.scrapedate}</td>
+                    <td>${history.places.length}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    `;
+    const m_footer = `
+    <div style="display: flex; justify-content: space-between; gap: 12px;">
+        <button data-i18n="modal.clear1history.cancel" class="btn btn-primary btn-modal" id="no" data-dismiss="modal">Cancel</button>
+        <button data-i18n="modal.clear1history.delete" class="btn btn-danger btn-modal" id="yes" data-dismiss="modal">Delete</button>
+    </div>
+    `;
+
+    const modal = new modalCreator(
+        "delete-history",
+        "Delete history",
+        m_body,
+        m_footer,
+        {
+            title_i18n: "modal.clear1history.title",
+        }
+    )
+    const m = modal.create();
+    modal.show();
+    $(`#${m.id} #no`).click(function() {
+        modalAPI.removeModal(m.id);
+    });
+    $(`#${m.id} #yes`).click(function() {
+        modalAPI.removeModal(m.id);
+        chrome.storage.local.get(['history'], (result) => {
+            if (!result.history) {
+                console.warn('No history found');
+                return;
+            }
+            // id is the index of the history
+            result.history.splice(id, 1);
+            chrome.storage.local.set({history: result.history}, function() {
+                console.log('History deleted');
+                const history = getHistory();
+                appendHistory(history);
+            });
+        });
+    });
 }    
 
 const createHistoryTable = (history) => {
@@ -161,6 +221,9 @@ const createHistoryTable = (history) => {
     `);
     html.find('#openhistory').click(function() {
         viewHistory(history);
+    });
+    html.find('#deletehistory').click(function() {
+        deleteHistory(history);
     });
 
     return html;
