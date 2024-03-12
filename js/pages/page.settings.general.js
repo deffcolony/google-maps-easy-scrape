@@ -4,13 +4,36 @@ const sendMessage = (message) => {
     window.parent.postMessage(message, '*');
 }
 
+const saveScrapingOptions = (options) => {
+    chrome.storage.sync.set({ scrapingOptions: options }, () => {
+        console.log('Scraping options saved');
+    });
+}
+
+const getScrapingOptions = async () => {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get(['scrapingOptions'], (result) => {
+            console.log('Scraping options', result);
+            if (!result.scrapingOptions) {
+                resolve({
+                    ratings: true,
+                    reviews: true,
+                    phone: false,
+                    address: false,
+                    website: false
+                });
+                return;
+            }
+            resolve(result.scrapingOptions);
+        });
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function() {
 
     const lang = new dropdown("languageSelect");
     lang.addItems([
         { value: "en-US", text: "English (US)" },
-        // dutch
         { value: "nl", text: "Nederlands" },
         { value: "is", text: "Íslenska" },
 
@@ -33,15 +56,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // get current language
     chrome.storage.sync.get(['language'], function(result) {
+        if (result.language === undefined) {
+            result.language = "en-US";
+        }
         lang.setValue(result.language);
     });
+    const scrapingoptions = {
+        appendElement: $(".scraping-options"),
+        options: [
+            new checkbox('ratings', 'Ratings'),
+            new checkbox('reviews', 'Reviews'),
+            new checkbox('phone', 'Phone'),
+            new checkbox('address', 'Address'),
+            new checkbox('industry', 'Industry'),
+            new checkbox('website', 'Website')
+        ],
+        values : {
+        }
+    }
 
-    // saveGeneralButton
-    // $("#saveGeneralButton").click(function() {
-    //     try {
-    //         saveLanguage(lang.value);
-    //     } catch (e) {
-    //         openFailedSave(e.stack);
-    //     }
-    // });
+    scrapingoptions.options.forEach((option) => {
+        $(scrapingoptions.appendElement).append(option.draw());
+        option.init();
+        option.on('change', function(event) {
+            console.log('Scraping option changed', event.detail.value);
+            scrapingoptions.values[event.detail.id] = event.detail.value;
+            saveScrapingOptions(scrapingoptions.values);
+        });
+    });
+
+    
+    getScrapingOptions().then((options) => {
+        scrapingoptions.options.forEach((option) => {
+            option.setValue(options[option.id]);
+            scrapingoptions.values[option.id] = options[option.id];
+        });
+    });
+
+    $("#scapreEnableAll").click(function() {
+        scrapingoptions.options.forEach((option) => {
+            option.setValue(true);
+            scrapingoptions.values[option.id] = true;
+        });
+        saveScrapingOptions(scrapingoptions.values);
+    });
+    $("#scapreDisableAll").click(function() {
+        scrapingoptions.options.forEach((option) => {
+            option.setValue(false);
+            scrapingoptions.values[option.id] = false;
+        });
+        saveScrapingOptions(scrapingoptions.values);
+    });
 });

@@ -9,8 +9,6 @@ async function getBrowserTheme() {
             resolve(result.theme);
         });
     });
-
-    // return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 function setTheme(theme) {
@@ -20,12 +18,9 @@ function setTheme(theme) {
 
 // dom loaded
 document.addEventListener('DOMContentLoaded', async function() {
-    // get extension version
     ext_ver.text(`Version: ${chrome.runtime.getManifest().version}`);
-
     // get buttons with class "attr-page"
     const pages = nav.find('.item[attr-page]');
-    console.log('pages', pages);
     // loop through buttons
     pages.each(function(index, button) {
         const page = button.getAttribute('attr-page');
@@ -98,6 +93,12 @@ const watchEventsFromIframe = () => {
                 setTheme(event.data.theme);
                 if (!event.data.theme || event.data.theme != 'custom') {
                     clearColors();
+                }
+                if (!event.data.theme || event.data.theme == 'custom') {
+                    getSavedColors().then((colors) => {
+                        clearColors();
+                        applyColors(colors);
+                    });
                 }
                 chrome.storage.sync.set({ theme: event.data.theme }, () => {
                     console.log('Theme saved', event.data.theme);

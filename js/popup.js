@@ -9,6 +9,25 @@ const trustedDomains = [
     'https://www.google.com/maps/reserve',
 ]
 
+const getScrapingOptions = async () => {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get(['scrapingOptions'], (result) => {
+            console.log('Scraping options', result.scrapingOptions);
+            if (!result.scrapingOptions) {
+                resolve({
+                    ratings: true,
+                    reviews: true,
+                    phone: false,
+                    address: false,
+                    website: false
+                });
+                return;
+            }
+            resolve(result.scrapingOptions);
+        });    
+    });
+}
+
 // const placeholder_item = [{
 //     scrapedate : "2021-01-01",
 //     places : [
@@ -42,8 +61,102 @@ const trustedDomains = [
 // }];
 
 
-const saveScrapeData = (data) => {
+const saveScrapeData = async (data) => {
     console.log('data', data);
+    let scrapingopts = {
+        ratings: true,
+        reviews: true,
+        phone: false,
+        address: false,
+        website: false
+    }
+    try {
+        scrapingopts = await getScrapingOptions();
+    } catch (error) {
+        log(`Error getting scraping options: ${error.message}`, "ERROR");
+    }
+
+    // filter data
+    data = data.map((item) => {
+        const newItem = {
+            title: item.title,
+            rating: item.rating,            // remove if the option from scrapingopts is false
+            reviewCount: item.reviewCount,  // remove if the option from scrapingopts is false
+            phone: item.phone,              // remove if the option from scrapingopts is false
+            industry: item.industry,        // remove if the option from scrapingopts is false
+            address: item.address,          // remove if the option from scrapingopts is false
+            companyUrl: item.companyUrl,    // remove if the option from scrapingopts is false
+            href: item.href
+        }
+
+        if (!scrapingopts.ratings) {
+            delete newItem.rating;
+        }
+        if (!scrapingopts.reviews) {
+            delete newItem.reviewCount;
+        }
+        if (!scrapingopts.phone) {
+            delete newItem.phone;
+        }
+        if (!scrapingopts.address) {
+            delete newItem.address;
+        }
+        if (!scrapingopts.industry) {
+            delete newItem.industry;
+        }
+        if (!scrapingopts.website) {
+            delete newItem.companyUrl;
+        }
+        console.log('newItem', newItem);
+        return newItem;
+    });
+
+    console.log('scrapingopts', scrapingopts);
+    console.log('final data', data);
+
+    const m_body = `
+    <p>This is the data that will be saved:</p>
+    <table class="table table-striped">
+        ${data.map((item) => {
+            return `
+            <tr>
+                <td>${item.title        || 'N/A'}</td>
+                <td>${item.rating       || 'N/A'}</td>
+                <td>${item.reviewCount  || 'N/A'}</td>
+                <td>${item.phone        || 'N/A'}</td>
+                <td>${item.industry     || 'N/A'}</td>
+                <td>${item.address      || 'N/A'}</td>
+                <td>${item.companyUrl   || 'N/A'}</td>
+            </tr>
+            `;
+        }
+        ).join('')}
+    </table>
+    `;
+
+
+    const m_footer = `
+    <div style="display: flex; gap: 18px; margin: 0;" class="fullwidth">
+        <button class="fullwidth btn btn-primary" id="confirm">Confirm</button>
+        <button class="fullwidth btn btn-primary" id="close">Close</button>
+    </div>`;
+
+    // show notification
+    const m = new modalCreator(
+        "save-scrape-confirm",
+        "Final confirmation",
+        m_body,
+        m_footer,
+        {
+        }
+    )
+    m.create();
+    m.show();
+    $(`#${m.id} #close`).click(() => {
+        modalAPI.removeModal(m.id);
+    });
+
+    $(`#${m.id} #confirm`).click(() => {
     // save to history
     chrome.storage.local.get(['history'], (result) => {
         try {
@@ -94,6 +207,7 @@ const saveScrapeData = (data) => {
                 modalAPI.removeModal(m.id);
             }, 10000);
         }
+    });
     });
 }
 
@@ -218,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function scrapeData() {
     var links = Array.from(document.querySelectorAll('a[href^="https://www.google.com/maps/place"]'));
-    return links.map(link => {
+    return links.map( link => {
         var container = link.closest('[jsaction*="mouseover:pane"]');
         var titleText = container ? container.querySelector('.fontHeadlineSmall').textContent : '';
         var rating = '';
@@ -228,8 +342,9 @@ function scrapeData() {
         var address = '';
         var companyUrl = '';
 
+
         // Rating and Reviews
-        if (container) {
+        if (container  ) {
             var roleImgContainer = container.querySelector('[role="img"]');
             
             if (roleImgContainer) {
