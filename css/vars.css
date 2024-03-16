@@ -201,14 +201,14 @@ table th {
 table td {
     padding: 12px;
     border-bottom: 1px solid var(--table-border-color);
-    background-color: var(--bkg-color-1);
+    /* background-color: var(--bkg-color-1); */
+    color: var(--table-text-color);
+}
+table td *{
     color: var(--table-text-color);
 }
 table tr:last-child td {
     border-bottom: none;
-}
-table td *{
-    color: var(--table-text-color);
 }
 table thead {
     background-color: var(--primary-color);
@@ -217,6 +217,9 @@ table thead th {
     background-color: var(--primary-color);
     border-bottom: 1px solid var(--table-border-color);
     color: var(--text-color-on-primary);
+}
+table tbody tr:hover {
+    background-color: var(--bkg-color-2);
 }
 
 .alert.alert-warning {
