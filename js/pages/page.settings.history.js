@@ -10,6 +10,53 @@ const getHistory = async () => {
     });
 }
 
+let table = $('#history-table tbody');
+
+
+const appendHistory = (history) => {
+    console.log('Appending history', history);
+    try {
+        if (history != undefined) {
+            if (history.length === 0) {
+                initTranslations();
+            } else {
+                // empty table
+                table.empty();
+                history.reverse();
+                history.forEach((item, index) => {
+                    table.append(createHistoryTable(item));
+                });
+                initTranslations();
+            }
+        } else {
+            console.warn('No history found');
+        }
+    } catch (error) {
+        console.error('Error getting history', error);
+        const m_body = `
+        <p data-i18n="modal.clearhistory.error">An error occurred while getting your history</p><br>
+        <pre>${error.stack}</pre>
+        `;
+        const m_footer = `
+        <div style="display: flex; justify-content: space-between; gap: 12px;">
+            <button data-i18n="text.ok" class="btn btn-primary btn-modal" id="ok" data-dismiss="modal">OK</button>
+        </div>
+            `;
+        const modal = new modalCreator(
+            "err",
+            "Error",
+            m_body,
+            m_footer,
+            {}
+        )
+        const m = modal.create();
+        modal.show();
+        $(`#${m.id} #ok`).click(function() {
+            modalAPI.removeModal(m.id);
+        });
+    }
+}    
+
 const noHistory = () => {
     return `
     <tr>
@@ -53,8 +100,8 @@ const viewHistory = (history) => {
                 <thead>
                     <tr>
                         <th data-i18n="modal.history.view.title">Name</th>
-                        <th data-i18n="modal.history.view.map">Map</th>
                         <th data-i18n="modal.history.view.phone">Phone</th>
+                        <th data-i18n="modal.history.view.map">Map</th>
                         <th data-i18n="modal.history.view.rating">
                         >Rating (Reviews)</th>
                     </tr>
@@ -196,9 +243,9 @@ const deleteHistory = (history) => {
             }
             // id is the index of the history
             result.history.splice(id, 1);
-            chrome.storage.local.set({history: result.history}, function() {
+            chrome.storage.local.set({history: result.history}, async function() {
                 console.log('History deleted');
-                const history = getHistory();
+                const history = await getHistory();
                 appendHistory(history);
             });
         });
@@ -230,50 +277,7 @@ const createHistoryTable = (history) => {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
-    const table = $('#history-table tbody');
-
-    const appendHistory = (history) => {
-        try {
-            if (history != undefined) {
-                if (history.length === 0) {
-                    initTranslations();
-                } else {
-                    // empty table
-                    table.empty();
-                    history.reverse();
-                    history.forEach((item, index) => {
-                        table.append(createHistoryTable(item));
-                    });
-                    initTranslations();
-                }
-            } else {
-                console.warn('No history found');
-            }
-        } catch (error) {
-            console.error('Error getting history', error);
-            const m_body = `
-            <p data-i18n="modal.clearhistory.error">An error occurred while getting your history</p><br>
-            <pre>${error.stack}</pre>
-            `;
-            const m_footer = `
-            <div style="display: flex; justify-content: space-between; gap: 12px;">
-                <button data-i18n="text.ok" class="btn btn-primary btn-modal" id="ok" data-dismiss="modal">OK</button>
-            </div>
-                `;
-            const modal = new modalCreator(
-                "err",
-                "Error",
-                m_body,
-                m_footer,
-                {}
-            )
-            const m = modal.create();
-            modal.show();
-            $(`#${m.id} #ok`).click(function() {
-                modalAPI.removeModal(m.id);
-            });
-        }
-    }    
+    table = $('#history-table tbody');
 
     const deleteHistory = () => {
         const m_body = `
